@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nowocodes.bitcoin_ticker">
    <application
-        android:label="bitcoin_ticker"
+        android:label="Bitcoin Ticker"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
