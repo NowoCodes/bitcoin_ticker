@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 
 const List<String> currenciesList = [
@@ -38,7 +37,6 @@ const List<String> cryptoList = [
 // const apiKey = 'A5F01A9A-69B2-4EB7-9910-E2426E5DC421';
 const nomicsAPIURL = 'https://api.nomics.com/v1/currencies/ticker';
 const apiKey = '0541da9f55fb84f8ec18903d3daf4415';
-Dio dio = new Dio();
 
 class CoinData {
   Future getCoinData(String selectedCurrency) async {
@@ -51,18 +49,6 @@ class CoinData {
       //     '/v1/exchangerate/$crypto/$selectedCurrency',
       //     {'apikey': '{$apiKey}'});
       // COIN API
-
-      // var requestUrl =
-      //     "https://api.nomics.com/v1/currencies/ticker?key=$apiKey&ids=$crypto&convert=$selectedCurrency";
-      // Response response = await dio.get(requestUrl);
-
-      // Optionally the request above could also be done as
-      // Response response =
-      //     await dio.get("$nomicsAPIURL/currencies/ticker", queryParameters: {
-      //   "key": "$apiKey",
-      //   "ids": "$crypto",
-      //   "convert": "$selectedCurrency",
-      // });
 
       String requestUrl =
           '$nomicsAPIURL?key=$apiKey&ids=$crypto&convert=$selectedCurrency';
