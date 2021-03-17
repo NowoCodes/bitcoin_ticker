@@ -33,7 +33,7 @@ const List<String> cryptoList = [
 
 // const coinAPIURL = 'rest.coinapi.io';
 // const apiKey = 'A5F01A9A-69B2-4EB7-9910-E2426E5DC421';
-const nomicsAPIURL = 'api.nomics.com';
+const nomicsAPIURL = 'htpps://api.nomics.com/v1';
 const apiKey = '0541da9f55fb84f8ec18903d3daf4415';
 Dio dio = new Dio();
 
@@ -54,8 +54,8 @@ class CoinData {
       // Response response = await dio.get(requestUrl);
 
       // Optionally the request above could also be done as
-      Response response = await dio
-          .get("https://api.nomics.com/v1/currencies/ticker", queryParameters: {
+      Response response =
+          await dio.get("$nomicsAPIURL/currencies/ticker", queryParameters: {
         "key": "$apiKey",
         "ids": "$crypto",
         "convert": "$selectedCurrency",
