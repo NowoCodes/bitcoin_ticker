@@ -1,5 +1,4 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+import 'package:dio/dio.dart';
 
 const List<String> currenciesList = [
   'AUD',
@@ -36,26 +35,34 @@ const List<String> cryptoList = [
 // const apiKey = 'A5F01A9A-69B2-4EB7-9910-E2426E5DC421';
 const nomicsAPIURL = 'api.nomics.com';
 const apiKey = '0541da9f55fb84f8ec18903d3daf4415';
+Dio dio = new Dio();
 
 class CoinData {
   Future getCoinData(String selectedCurrency) async {
     Map<String, String> cryptoPrices = {};
 
     for (String crypto in cryptoList) {
-      // COIN API
+      // COIN API using http package
       // var requestUrl = Uri.https(
       //     '$coinAPIURL',
       //     '/v1/exchangerate/$crypto/$selectedCurrency',
       //     {'apikey': '{$apiKey}'});
       // COIN API
 
-      var requestUrl =
-          "https://api.nomics.com/v1/currencies/ticker?key=0541da9f55fb84f8ec18903d3daf4415&ids=$crypto&convert=$selectedCurrency";
+      // var requestUrl =
+      //     "https://api.nomics.com/v1/currencies/ticker?key=$apiKey&ids=$crypto&convert=$selectedCurrency";
+      // Response response = await dio.get(requestUrl);
 
-      http.Response response = await http.get(requestUrl);
+      // Optionally the request above could also be done as
+      Response response = await dio
+          .get("https://api.nomics.com/v1/currencies/ticker", queryParameters: {
+        "key": "$apiKey",
+        "ids": "$crypto",
+        "convert": "$selectedCurrency",
+      });
 
       if (response.statusCode == 200) {
-        var decodedData = convert.jsonDecode(response.body);
+        var decodedData = response.data;
         // COIN API
         // double price = decodedData['rate'];
         // cryptoPrices[crypto] = price.toStringAsFixed(0);
@@ -64,7 +71,7 @@ class CoinData {
         String price = decodedData[0]['price'];
         cryptoPrices[crypto] = double.parse(price).toStringAsFixed(0);
       } else {
-        throw 'Problem with the get request. Status code: ${response.statusCode}';
+        throw 'Problem with the get request. Status code: ${response.statusMessage}';
       }
     }
     return cryptoPrices;
