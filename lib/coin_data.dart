@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 
 const List<String> currenciesList = [
   'AUD',
@@ -33,7 +36,7 @@ const List<String> cryptoList = [
 
 // const coinAPIURL = 'rest.coinapi.io';
 // const apiKey = 'A5F01A9A-69B2-4EB7-9910-E2426E5DC421';
-const nomicsAPIURL = 'htpps://api.nomics.com/v1';
+const nomicsAPIURL = 'https://api.nomics.com/v1/currencies/ticker';
 const apiKey = '0541da9f55fb84f8ec18903d3daf4415';
 Dio dio = new Dio();
 
@@ -54,15 +57,19 @@ class CoinData {
       // Response response = await dio.get(requestUrl);
 
       // Optionally the request above could also be done as
-      Response response =
-          await dio.get("$nomicsAPIURL/currencies/ticker", queryParameters: {
-        "key": "$apiKey",
-        "ids": "$crypto",
-        "convert": "$selectedCurrency",
-      });
+      // Response response =
+      //     await dio.get("$nomicsAPIURL/currencies/ticker", queryParameters: {
+      //   "key": "$apiKey",
+      //   "ids": "$crypto",
+      //   "convert": "$selectedCurrency",
+      // });
+
+      String requestUrl =
+          '$nomicsAPIURL?key=$apiKey&ids=$crypto&convert=$selectedCurrency';
+      http.Response response = await http.get(requestUrl);
 
       if (response.statusCode == 200) {
-        var decodedData = response.data;
+        var decodedData = jsonDecode(response.body);
         // COIN API
         // double price = decodedData['rate'];
         // cryptoPrices[crypto] = price.toStringAsFixed(0);
@@ -71,7 +78,7 @@ class CoinData {
         String price = decodedData[0]['price'];
         cryptoPrices[crypto] = double.parse(price).toStringAsFixed(0);
       } else {
-        throw 'Problem with the get request. Status code: ${response.statusMessage}';
+        throw 'Problem with the get request. Status code: ${response.statusCode}';
       }
     }
     return cryptoPrices;
